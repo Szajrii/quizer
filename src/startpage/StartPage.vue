@@ -9,7 +9,7 @@
             <div class="quizer-sign">
                 <p> Do not wait! Join quizer community now! <span @click="navigateToRegistation">Sign up</span></p>
                 <p style="font-size: 1.6vw">If you don't have account</p>
-                <p><span>Sign in!</span></p>
+                <p><span @click="navigateToLogin">Sign in!</span></p>
             </div>
         </div>
     </v-app>
@@ -24,6 +24,9 @@
         methods: {
             navigateToRegistation() {
                 router.push({ path: '/Register' })
+            },
+            navigateToLogin() {
+                router.push({ path: '/Login' })
             }
         }
     }
