@@ -34,13 +34,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .quizer-start {
-        width: 100%;
-        height: 100%;
-        background-image: url("../img/start.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
-    }
 
     .quizer-appinfo {
         padding-top: 10%;

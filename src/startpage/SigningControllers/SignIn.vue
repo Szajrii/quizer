@@ -7,7 +7,7 @@
                             label="Email"
                             outlined
                             type="email"
-                            color="#5f99c9"
+                            color="white"
                             v-model="email"
                             :rules="[rules.required]"
                     ></v-text-field>
@@ -18,15 +18,15 @@
                             :type="show1 ? 'text' : 'password'"
                             label="Password"
                             counter
-                            color="#5f99c9"
+                            color="white"
                             @click:append="show1 = !show1"
                     ></v-text-field>
-                    <div class="quizer-loginbutton">
-                        <v-btn color="accent" :block="buttonProps" :x-large="buttonProps" @click="logIn">
+                    <div class="quizer-signerbutton">
+                        <v-btn color="primary" :block="buttonProps" :x-large="buttonProps" @click="logIn">
                             Login
                         </v-btn>
                     </div>
-                    <div class="quizer-registerwarning red--text text-center" >
+                    <div class="quizer-signerwarning red--text text-center" >
                         <transition name="fade">
                             <p v-if="showWarning">{{warning}}</p>
                         </transition>
@@ -85,33 +85,4 @@
 
 <style scoped>
 
-    .quizer-start {
-        width: 100%;
-        height: 100%;
-        background-image: url("../../img/start.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    .quizer-signin {
-        width: 50%;
-        margin: auto;
-        padding-top: 10%;
-    }
-
-    .quizer-loginbutton {
-        width: 60%;
-        margin: auto;
-    }
-
-    .quizer-registerwarning {
-        margin-top: 15px;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity 1s;
-    }
-    .fade-leave-to {
-        opacity: 0;
-    }
 </style>

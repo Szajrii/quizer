@@ -8,7 +8,7 @@
                             label="Email"
                             outlined
                             type="email"
-                            color="#5f99c9"
+                            color="white"
                             v-model="email"
                             :rules="[rules.emailMatch]"
                     ></v-text-field>
@@ -19,22 +19,22 @@
                             :type="show1 ? 'text' : 'password'"
                             label="Password"
                             counter
-                            color="#5f99c9"
+                            color="white"
                             @click:append="show1 = !show1"
                     ></v-text-field>
                     <v-text-field
                             label="Nickname"
                             outlined
-                            color="#5f99c9"
+                            color="white"
                             v-model="nickname"
                             :rules="[rules.required]"
                     ></v-text-field>
-                    <div class="quizer-registerbutton">
-                        <v-btn color="accent" :block="buttonProps" :x-large="buttonProps" @click="startRegister">
+                    <div class="quizer-signerbutton">
+                        <v-btn color="primary" :block="buttonProps" :x-large="buttonProps" @click="startRegister">
                             Register
                         </v-btn>
                     </div>
-                    <div class="quizer-registerwarning red--text text-center" >
+                    <div class="quizer-signerwarning red--text text-center" >
                         <transition name="fade">
                             <p v-if="showWarning">{{warning}}</p>
                         </transition>
@@ -47,9 +47,11 @@
 </template>
 
 <script>
-    import * as firebase from "firebase/app";
+    import firebase from "firebase";
     import "firebase/auth";
+    import router from '../../router'
     const axios = require('axios');
+    const db = firebase.firestore();
 
     export default {
         name: "SignUp",
@@ -86,9 +88,23 @@
                     })
                     .then(response => {
                         if(response.data) {
-                            firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(function(error) {
-                                const errorCode = error.code;
-                                const errorMessage = error.message;
+                            firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+                                .then(()=> {
+                                    db.collection("Users").doc(this.nickname).set({
+                                        email: this.email,
+                                        nickname: this.nickname,
+                                        quizes: []
+                                    });
+                                    firebase.auth().onAuthStateChanged(user => {
+                                        if (user) {
+                                            router.push( { name: 'quizer', params: {'user': this.nickname, 'email': this.email} } )
+                                        } else {}
+                                    });
+                                })
+                                .catch(error => {
+                                this.showWarning = true;
+                                this.warning = error.message;
+                                setTimeout(()=> {this.showWarning = false}, 8000);
                             });
                         }else {
                             this.showWarning = true;
@@ -104,33 +120,10 @@
 </script>
 
 <style scoped lang="scss">
-    .quizer-start {
-        width: 100%;
-        height: 100%;
-        background-image: url("../../img/start.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
+
+    .quizer-signin input {
+        color: white !important;
     }
 
-    .quizer-signin {
-        width: 50%;
-        margin: auto;
-        padding-top: 10%;
-    }
 
-    .quizer-registerbutton {
-        width: 60%;
-        margin: auto;
-    }
-
-    .quizer-registerwarning {
-        margin-top: 15px;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity 1s;
-    }
-    .fade-leave-to {
-        opacity: 0;
-    }
 </style>

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import StartPage from '../startpage/StartPage.vue'
 import SignIn from '../startpage/SigningControllers/SignIn.vue'
 import SignUp from '../startpage/SigningControllers/SignUp.vue'
+import MainApp from '../mainapp/MainApp'
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,12 @@ const routes = [
     path: "/Login",
     name: "SignIn",
     component: SignIn
+  },
+  {
+    path: "quizer/user=" + ":user",
+    name: "quizer",
+    component: MainApp,
+    props: true
   }
 ]
 
