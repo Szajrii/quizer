@@ -40,8 +40,9 @@
 </template>
 
 <script>
-    import * as firebase from "firebase/app";
+    import firebase from "firebase";
     import "firebase/auth";
+    import router from '../../router'
 
     export default {
         name: "SignIn",
@@ -67,7 +68,11 @@
                 }else {
                     firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                         .then(()=> {
-                            //TODO: redirect to main app
+                            firebase.auth().onAuthStateChanged(user => {
+                                if (user) {
+                                    router.push( { name: 'quizer', params: {'email': this.email} } )
+                                } else {}
+                            });
                         })
                         .catch(error => {
                         showWarning.call(this, error.message)

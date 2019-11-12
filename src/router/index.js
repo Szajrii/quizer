@@ -24,7 +24,7 @@ const routes = [
     component: SignIn
   },
   {
-    path: "quizer/user=" + ":user",
+    path: "quizer/user=" + ":email",
     name: "quizer",
     component: MainApp,
     props: true

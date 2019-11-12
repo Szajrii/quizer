@@ -90,14 +90,14 @@
                         if(response.data) {
                             firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                                 .then(()=> {
-                                    db.collection("Users").doc(this.nickname).set({
+                                    db.collection("Users").doc(this.email).set({
                                         email: this.email,
                                         nickname: this.nickname,
                                         quizes: []
                                     });
                                     firebase.auth().onAuthStateChanged(user => {
                                         if (user) {
-                                            router.push( { name: 'quizer', params: {'user': this.nickname, 'email': this.email} } )
+                                            router.push( { name: 'quizer', params: {'email': this.email} } )
                                         } else {}
                                     });
                                 })

@@ -2,6 +2,11 @@ $color-pack: true;
 
 @import '~vuetify/src/styles/main.sass';
 
+
+body, html {
+  width: 100%;
+  height: 100%;
+}
 .quizer-start {
   width: 100%;
   height: 100%;
