@@ -8,7 +8,7 @@
             </div>
             <div class="quizer-sign">
                 <p> Do not wait! Join quizer community now! <span @click="navigateToRegistation">Sign up</span></p>
-                <p style="font-size: 1.6vw">If you don't have account</p>
+                <p style="font-size: 1.3vw">If you already have account</p>
                 <p><span @click="navigateToLogin">Sign in!</span></p>
             </div>
         </div>
@@ -18,6 +18,7 @@
 <script>
     import router from "../router"
 
+    //TODO: Redesign start page something bigger and cooler :)
     export default {
         name: "StartPage",
 

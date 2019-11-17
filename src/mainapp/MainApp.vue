@@ -1,24 +1,28 @@
 <template>
-    <div class="quizer-mainapp">
-        <div class="quizer-mainapp-sidemenu">
-            <div class="quizer-mainapp-sidemenu-logo">
-                <div class="quizer-mainapp-sidemenu-logo-content">
-                    <div><i class="fas fa-question"></i> Quizer</div>
+    <v-app>
+        <div class="quizer-mainapp">
+            <div class="quizer-mainapp-sidemenu">
+                <div class="quizer-mainapp-sidemenu-logo">
+                    <div class="quizer-mainapp-sidemenu-logo-content">
+                        <div><i class="fas fa-question"></i> Quizer</div>
+                    </div>
+                </div>
+                <div class="quizer-mainapp-sidemenu-elements">
+                    <SideMenuElement text="Quizes List" icon="far fa-list-alt" id="/" @click.native="navigateTo('list')"></SideMenuElement>
+                    <SideMenuElement text="User Profile" icon="fas fa-user" id="profile" @click.native="navigateTo('profile')"></SideMenuElement>
+                    <SideMenuElement text="Create Quiz" icon="far fa-plus-square" id="create" @click.native="navigateTo('create')"></SideMenuElement>
                 </div>
             </div>
-            <div class="quizer-mainapp-sidemenu-elements">
-                <SideMenuElement text="Quizes List" icon="far fa-list-alt" id="list"></SideMenuElement>
-                <SideMenuElement text="User Profile" icon="fas fa-user" id="profile"></SideMenuElement>
-                <SideMenuElement text="Create Quiz" icon="far fa-plus-square" id="create" @click.native="navigateTo('create')"></SideMenuElement>
+            <div class="quizer-mainapp-mainarea">
+                <div class="quizer-mainapp-mainarea-topmenu"></div>
+                <div class="quizer-mainapp-mainarea-content">
+                    <transition name="redirect" mode="out-in">
+                        <router-view></router-view>
+                    </transition>
+                </div>
             </div>
         </div>
-        <div class="quizer-mainapp-mainarea">
-            <div class="quizer-mainapp-mainarea-topmenu"></div>
-            <div class="quizer-mainapp-mainarea-content">
-                <router-view></router-view>
-            </div>
-        </div>
-    </div>
+    </v-app>
 </template>
 
 <script>
@@ -42,6 +46,13 @@
 
 <style lang="scss" scoped>
 
+    .redirect-enter-active, .redirect-leave-active {
+        transition: opacity .5s;
+    }
+    .redirect-enter, .redirect-leave-to {
+        opacity: 0;
+    }
+
     .quizer-mainapp {
         display: flex;
         width: 100%;
@@ -55,6 +66,7 @@
             -webkit-box-shadow: 8px 7px 19px -1px rgba(0,0,0,0.75);
             -moz-box-shadow: 8px 7px 19px -1px rgba(0,0,0,0.75);
             box-shadow: 8px 7px 19px -1px rgba(0,0,0,0.75);
+            z-index: 1;
 
             &-elements {
                 width: 100%;
@@ -95,7 +107,7 @@
             flex-direction: column;
             width: 85%;
             height: 100%;
-            background-color: #e9edfc;
+            background-color: rgba(219, 219, 219, 0.7);
 
             &-topmenu{
                 width: 100%;

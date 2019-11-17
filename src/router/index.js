@@ -5,6 +5,8 @@ import SignIn from '../startpage/SigningControllers/SignIn.vue'
 import SignUp from '../startpage/SigningControllers/SignUp.vue'
 import MainApp from '../mainapp/MainApp'
 import QuizCreator from '../mainapp/quizcreator/QuizCreator'
+import UserProfile from '../mainapp/userprofile/UserProfile'
+import QuizesList from '../mainapp/quizeslist/QuizesList'
 
 Vue.use(VueRouter);
 
@@ -29,12 +31,23 @@ const routes = [
     name: "quizer",
     component: MainApp,
     props: true,
+    redirect: { name: 'list' },
     children: [
+      {
+        path: '',
+        name: 'list',
+        component: QuizesList
+      },
       {
         path: 'create',
         name: "create",
         component: QuizCreator
-      }
+      },
+      {
+        path: 'profile',
+        name: "profile",
+        component: UserProfile
+      },
     ]
   }
 ];
