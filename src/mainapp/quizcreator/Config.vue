@@ -2,7 +2,6 @@
         <div class="quizer-creator-config">
             <v-form>
                 <div class="quizer-creator-config-title">
-
                         <v-text-field class="title-textfield"
                                       label="Title"
                                       color="white"
@@ -28,10 +27,25 @@
                 </div>
                 <div class="quizer-creator-config-field">
                     <div v-if="!editMode">
-                        <v-switch label="Multiple choices" color="success"></v-switch>
-                        <v-switch label="Shuffle questions" color="success"></v-switch>
+                        <v-switch label="Multiple choices" color="success" v-model="quizConfig.multipleChoices"></v-switch>
+                        <v-switch label="Shuffle questions" color="success" v-model="quizConfig.shuffle"></v-switch>
                     </div>
-
+                    <div v-else>
+                        <p><span class="primary--text">Multiple Choice: </span>{{quizConfig.multipleChoices}}</p>
+                        <p><span class="primary--text">Shuffle Questions: </span>{{quizConfig.shuffle}}</p>
+                    </div>
+                </div>
+                <div class="quizer-creator-config-field">
+                    <v-text-field
+                            v-model="quizConfig.numberOfQuestions"
+                            label="Rows"
+                            min="5"
+                            step="1"
+                            style="width: 170px"
+                            type="number"
+                            v-if="!editMode"
+                    ></v-text-field>
+                    <p v-else><span class="primary--text">Number of questions: </span>{{quizConfig.numberOfQuestions}}</p>
                 </div>
                 <div class="quizer-creator-config-field">
                     <v-textarea
@@ -39,6 +53,7 @@
                             hint="Max 300 characters"
                             :rules="[rules.description]"
                             v-model="quizConfig.description"
+                            no-resize
                             v-if="!editMode"
                     ></v-textarea>
                     <div v-else>
@@ -82,7 +97,10 @@
                 quizConfig: {
                     title: '',
                     category: '',
-                    description: ''
+                    description: '',
+                    multipleChoices: false,
+                    shuffle: false,
+                    numberOfQuestions: 5
                 }
             }
         },
@@ -135,6 +153,10 @@
         &-field {
             width: 70%;
             margin: auto;
+        }
+
+        p {
+            word-wrap: break-word;
         }
     }
 
