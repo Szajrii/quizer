@@ -38,7 +38,7 @@
                 <div class="quizer-creator-config-field">
                     <v-text-field
                             v-model="quizConfig.numberOfQuestions"
-                            label="Rows"
+                            label="Number of questions"
                             min="5"
                             step="1"
                             style="width: 170px"
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+    import {Eventbus} from '../../eventbus/Eventbus'
     export default {
         name: "Config",
         data() {
@@ -106,7 +107,20 @@
         },
         methods: {
             changeEditMode() {
-                this.editMode = !this.editMode;
+                if(!this.areRequiredFieldsEmpty()) {
+                    this.editMode = !this.editMode;
+                }else {
+                    Eventbus.$emit('configFieldsMissing', {
+                        title: this.quizConfig.title,
+                        category: this.quizConfig.category,
+                        description: this.quizConfig.description,
+                    })
+                }
+            },
+            areRequiredFieldsEmpty() {
+                if(this.quizConfig.title === '' || this.quizConfig.category === '' || this.quizConfig.description === '') {
+                    return true
+                }else return false
             }
         },
         computed: {

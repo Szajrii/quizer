@@ -17,7 +17,7 @@ export default new Vuetify({
           secondary: "#9c27b0",
           accent: "#e91e63",
           error: "#f44336",
-          warning: "#ffc107",
+          warning: "#ff8d1f",
           info: "#00bcd4",
           success: "#4caf50"
       },
