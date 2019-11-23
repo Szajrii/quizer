@@ -1,14 +1,13 @@
 <template>
     <div class="quizer-creator">
         <Config></Config>
-        <div class="quizer-creator-questions"></div>
-        <v-snackbar v-model="configWarning" color="warning">
+        <QuizList></QuizList>
+        <v-snackbar v-model="configWarning" color="warning" multi-line>
             Seems like you want to create quiz without basic parameters. Please fill {{warningDetails}}.
             <v-btn
                     color="error"
                     text
                     @click="configWarning = false"
-                    multi-line
             >
                 Close
             </v-btn>
@@ -18,16 +17,19 @@
 
 <script>
     import Config from './Config'
+    import QuizList from './QuizList'
     import {Eventbus} from '../../eventbus/Eventbus'
     export default {
         name: "QuizCreator",
         components: {
+            QuizList,
             Config
         },
         data() {
             return {
                 configWarning: false,
-                warningDetails: ''
+                warningDetails: '',
+                config: {}
             }
         },
         methods: {
@@ -43,15 +45,19 @@
                   this.warningDetails += ' description';
 
               this.configWarning = true;
+          },
+          updateConfig(config) {
+              this.config = config;
           }
         },
         created() {
-            Eventbus.$on('configFieldsMissing', this.showConfigWarnign)
+            Eventbus.$on('configFieldsMissing', this.showConfigWarnign);
+            Eventbus.$on('configFields', this.updateConfig);
         }
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
     .quizer-creator {
         width: 100%;

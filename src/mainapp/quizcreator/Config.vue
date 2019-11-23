@@ -109,6 +109,14 @@
             changeEditMode() {
                 if(!this.areRequiredFieldsEmpty()) {
                     this.editMode = !this.editMode;
+                    Eventbus.$emit('configFields', {
+                        title: this.quizConfig.title,
+                        category: this.quizConfig.category,
+                        description: this.quizConfig.description,
+                        multipleChoices: this.quizConfig.multipleChoices,
+                        shuffle: this.quizConfig.shuffle,
+                        numberOfQuestions: parseInt(this.quizConfig.numberOfQuestions)
+                    })
                 }else {
                     Eventbus.$emit('configFieldsMissing', {
                         title: this.quizConfig.title,
