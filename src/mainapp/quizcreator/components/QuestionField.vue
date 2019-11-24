@@ -1,15 +1,18 @@
 <template>
     <div class="quizer-creator-question-field">
         <div class="quizer-creator-question-field-wrapper">
+            <div class="correct-answer">
+                <v-checkbox color="success" v-model="config.correctAnswer" @change="$emit('setCorrectAnswer', index)"></v-checkbox>
+            </div>
             <v-text-field
                     label="Answer"
                     single-line
                     full-width
                     hide-details
-                    v-model="answerField"
-                    @change="$emit('changeAnswer', {index: index, answerField: answerField})"
+                    v-model="config.answerField"
+                    @change="$emit('changeAnswer', {index: index, answerField: config.answerField})"
             ></v-text-field>
-            <div class="field-removeicon"><v-icon @click="$emit('answerToBeRemoved', index)">far fa-trash-alt</v-icon></div>
+            <div class="field-removeicon"><v-icon @click="$emit('answerToBeRemoved', index)" :disabled="this.numberOfAnswers <= 2">far fa-trash-alt</v-icon></div>
         </div>
         <v-divider></v-divider>
     </div>
@@ -19,23 +22,16 @@
 
     export default {
         name: "QuestionField",
-        props: ["answer", "index"],
+        props: ["answer", "index", "numberOfAnswers"],
         data() {
             return {
-                answerField: this.answer
+                config: this.answer
             }
         },
     }
 </script>
 
 <style lang="scss" scoped>
-
-    .slide-leave-active {
-        transition: all .5s;
-    }
-    .slide-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: translateX(-100vh);
-    }
 
     .quizer-creator-question-field {
         width: 100%;
@@ -58,5 +54,10 @@
         i:hover {
             font-size: 30px;
         }
+    }
+
+    .correct-answer {
+        padding-left: 10px;
+
     }
 </style>

@@ -113,7 +113,7 @@
             }
 
             &-content {
-                height: 90%;
+                min-height: 90%;
                 width: 100%;
             }
         }

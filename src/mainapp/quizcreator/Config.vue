@@ -9,7 +9,7 @@
                                       append-icon="fas fa-book-reader"
                                       :rules="[rules.title]"
                                       v-model="quizConfig.title"
-                                      v-if="!editMode"
+                                      v-if="editMode"
                         ></v-text-field>
                         <p v-else>{{quizConfig.title}}</p>
                 </div>
@@ -21,12 +21,12 @@
                             no-resize
                             :rules="[rules.category]"
                             v-model="quizConfig.category"
-                            v-if="!editMode"
+                            v-if="editMode"
                     ></v-text-field>
                     <p v-else><span class="primary--text">Category: </span>{{quizConfig.category}}</p>
                 </div>
                 <div class="quizer-creator-config-field">
-                    <div v-if="!editMode">
+                    <div v-if="editMode">
                         <v-switch label="Multiple choices" color="success" v-model="quizConfig.multipleChoices"></v-switch>
                         <v-switch label="Shuffle questions" color="success" v-model="quizConfig.shuffle"></v-switch>
                     </div>
@@ -43,7 +43,7 @@
                             step="1"
                             style="width: 170px"
                             type="number"
-                            v-if="!editMode"
+                            v-if="editMode"
                     ></v-text-field>
                     <p v-else><span class="primary--text">Number of questions: </span>{{quizConfig.numberOfQuestions}}</p>
                 </div>
@@ -54,7 +54,7 @@
                             :rules="[rules.description]"
                             v-model="quizConfig.description"
                             no-resize
-                            v-if="!editMode"
+                            v-if="editMode"
                     ></v-textarea>
                     <div v-else>
                         <span class="primary--text">Description: </span>
@@ -94,7 +94,7 @@
                     description: x => x.length <= 300  || 'Max 300 characters',
                     category: x => x.length <= 20  || 'Max 20 characters'
                 },
-                editMode: false,
+                editMode: true,
                 quizConfig: {
                     title: '',
                     category: '',
@@ -115,7 +115,8 @@
                         description: this.quizConfig.description,
                         multipleChoices: this.quizConfig.multipleChoices,
                         shuffle: this.quizConfig.shuffle,
-                        numberOfQuestions: parseInt(this.quizConfig.numberOfQuestions)
+                        numberOfQuestions: parseInt(this.quizConfig.numberOfQuestions),
+                        editMode: this.editMode
                     })
                 }else {
                     Eventbus.$emit('configFieldsMissing', {
@@ -133,7 +134,7 @@
         },
         computed: {
             activeButton() {
-                if(!this.editMode) {
+                if(this.editMode) {
                     return {color: 'success', icon: 'fas fa-check'}
                 }else {
                     return  {color: 'secondary', icon: 'fas fa-pen'}
