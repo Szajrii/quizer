@@ -6,35 +6,32 @@
                 color="#00838F"
                 dark
             >
-                    <div class="title-questionnumber">{{questionNumber}}. </div>
+                    <div class="title-questionnumber">{{index + 1}}. </div>
                     <div class="quizer-creator-question-title">
                         <v-text-field
-                                label="Question"
+                                :label="question.title"
                                 single-line
                                 full-width
                                 hide-details
-                                v-model="questionController.title"
+                                v-model="title"
+                                @change="$emit('updateQuestionTitle', {title, index})"
                         ></v-text-field>
                     </div>
-                    <div class="title-removeicon"><v-icon @click="$emit('questionToBeRemoved', questionNumber)">far fa-trash-alt</v-icon></div>
+                    <div class="title-removeicon"><v-icon @click="$emit('questionToBeRemoved', index)">far fa-trash-alt</v-icon></div>
             </v-toolbar>
-            <v-form>
-                <QuestionField
-                        v-for="(answer, index) in questionController.answers"
-                        :key="'answer' + Math.random()" :answer="answer"
-                        :index="index"
-                        :numberOfAnswers="questionConfig.numberOfAnswers"
-                        @changeAnswer="updateAnswers"
-                        @answerToBeRemoved="removeAnswer"
-                        @setCorrectAnswer="changeCorrectAnswersState"
-                ></QuestionField>
-            </v-form>
+            <QuestionField
+                    v-for="(answer, index2) in question.answers"
+                    :key="'answer' + Math.random()" :answer="answer"
+                    :index="index2"
+                    :questionIndex="index"
+                    :numberOfAnswers="question.answers.length"
+            ></QuestionField>
             <v-toolbar
                     flat
                     color="#CFD8DC"
                     dark
             >
-                <v-btn text icon color="success" fixed right @click="addAnswer" :disabled="questionController.answers.length >= 6">
+                <v-btn text icon color="success" fixed right @click="addAnswer" :disabled="question.answers.length >= 6">
                     <v-icon large>mdi-plus</v-icon>
                 </v-btn>
             </v-toolbar>
@@ -45,41 +42,22 @@
 
 <script>
     import QuestionField from './QuestionField'
+    import {Eventbus} from '../../../eventbus/Eventbus'
     export default {
         name: "Question",
         components: {
             QuestionField
         },
-        props: ["questionNumber", "question", "multiple"],
+        props: ["question", "multiple", "index"],
         data() {
             return {
-                questionConfig: {
-                    numberOfAnswers: 3
-                },
-                questionController: this.question,
+                title: ""
             }
         },
         methods: {
-            updateAnswers({index, answerField}) {
-                this.questionController.answers[index].answerField = answerField;
-            },
-            removeAnswer(index) {
-                if(this.questionController.answers.length > 2) {
-                    this.questionController.answers.splice(index, 1);
-                }
-                this.questionConfig.numberOfAnswers = this.questionController.answers.length;
-            },
             addAnswer() {
-                if (this.questionController.answers.length < 6) {
-                    this.questionController.answers.push({answerField: "Type your answer here", correctAnswer: false })
-                }
-
-                this.questionConfig.numberOfAnswers = this.questionController.answers.length;
-            },
-            changeCorrectAnswersState(index) {
-                if(!this.multiple) {
-                    this.questionController.answers.forEach(answer => answer.correctAnswer = false);
-                    this.questionController.answers[index].correctAnswer = true;
+                if (this.question.answers.length < 6) {
+                    Eventbus.$emit('addAnswer', this.index);
                 }
             }
         }

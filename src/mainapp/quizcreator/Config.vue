@@ -1,85 +1,82 @@
 <template>
         <div class="quizer-creator-config">
-            <v-form>
-                <div class="quizer-creator-config-title">
-                        <v-text-field class="title-textfield"
-                                      label="Title"
-                                      color="white"
-                                      height="100%"
-                                      append-icon="fas fa-book-reader"
-                                      :rules="[rules.title]"
-                                      v-model="quizConfig.title"
-                                      v-if="editMode"
-                        ></v-text-field>
-                        <p v-else>{{quizConfig.title}}</p>
-                </div>
-                <div class="quizer-creator-config-field">
-                    <v-text-field
-                            label="Category"
-                            height="100%"
-                            append-icon="fab fa-buffer"
-                            no-resize
-                            :rules="[rules.category]"
-                            v-model="quizConfig.category"
-                            v-if="editMode"
+            <div class="quizer-creator-config-title">
+                    <v-text-field class="title-textfield"
+                                  label="Title"
+                                  color="white"
+                                  height="100%"
+                                  append-icon="fas fa-book-reader"
+                                  :rules="[rules.title]"
+                                  v-model="quizConfig.title"
+                                  v-if="editMode"
                     ></v-text-field>
-                    <p v-else><span class="primary--text">Category: </span>{{quizConfig.category}}</p>
+                    <p v-else>{{quizConfig.title}}</p>
+            </div>
+            <div class="quizer-creator-config-field">
+                <v-text-field
+                        label="Category"
+                        height="100%"
+                        append-icon="fab fa-buffer"
+                        no-resize
+                        :rules="[rules.category]"
+                        v-model="quizConfig.category"
+                        v-if="editMode"
+                ></v-text-field>
+                <p v-else><span class="primary--text">Category: </span>{{quizConfig.category}}</p>
+            </div>
+            <div class="quizer-creator-config-field">
+                <div v-if="editMode">
+                    <v-switch label="Multiple choices" color="success" v-model="quizConfig.multipleChoices"></v-switch>
+                    <v-switch label="Shuffle questions" color="success" v-model="quizConfig.shuffle"></v-switch>
                 </div>
-                <div class="quizer-creator-config-field">
-                    <div v-if="editMode">
-                        <v-switch label="Multiple choices" color="success" v-model="quizConfig.multipleChoices"></v-switch>
-                        <v-switch label="Shuffle questions" color="success" v-model="quizConfig.shuffle"></v-switch>
-                    </div>
-                    <div v-else>
-                        <p><span class="primary--text">Multiple Choice: </span>{{quizConfig.multipleChoices}}</p>
-                        <p><span class="primary--text">Shuffle Questions: </span>{{quizConfig.shuffle}}</p>
-                    </div>
+                <div v-else>
+                    <p><span class="primary--text">Multiple Choice: </span>{{quizConfig.multipleChoices}}</p>
+                    <p><span class="primary--text">Shuffle Questions: </span>{{quizConfig.shuffle}}</p>
                 </div>
-                <div class="quizer-creator-config-field">
-                    <v-text-field
-                            v-model="quizConfig.numberOfQuestions"
-                            label="Number of questions"
-                            min="5"
-                            step="1"
-                            style="width: 170px"
-                            type="number"
-                            v-if="editMode"
-                    ></v-text-field>
-                    <p v-else><span class="primary--text">Number of questions: </span>{{quizConfig.numberOfQuestions}}</p>
-                </div>
-                <div class="quizer-creator-config-field">
-                    <v-textarea
-                            label="Quiz description"
-                            hint="Max 300 characters"
-                            :rules="[rules.description]"
-                            v-model="quizConfig.description"
-                            no-resize
-                            v-if="editMode"
-                    ></v-textarea>
-                    <div v-else>
-                        <span class="primary--text">Description: </span>
-                        <p >{{quizConfig.description}}</p>
-                    </div>
-
+            </div>
+            <div class="quizer-creator-config-field">
+                <v-text-field
+                        v-model="quizConfig.numberOfQuestions"
+                        label="Number of questions"
+                        min="5"
+                        step="1"
+                        style="width: 170px"
+                        type="number"
+                        v-if="editMode"
+                ></v-text-field>
+                <p v-else><span class="primary--text">Number of questions: </span>{{quizConfig.numberOfQuestions}}</p>
+            </div>
+            <div class="quizer-creator-config-field">
+                <v-textarea
+                        label="Quiz description"
+                        hint="Max 300 characters"
+                        :rules="[rules.description]"
+                        v-model="quizConfig.description"
+                        no-resize
+                        v-if="editMode"
+                ></v-textarea>
+                <div v-else>
+                    <span class="primary--text">Description: </span>
+                    <p >{{quizConfig.description}}</p>
                 </div>
 
-            </v-form>
-                <v-fab-transition>
-                    <v-btn
-                            :color="activeButton.color"
-                            :key="activeButton.icon"
-                            dark
-                            small
-                            absolute
-                            bottom
-                            right
-                            fab
-                            large
-                            @click="changeEditMode"
-                    >
-                    <v-icon>{{activeButton.icon}}</v-icon>
-                    </v-btn>
-                </v-fab-transition>
+            </div>
+            <v-fab-transition>
+                <v-btn
+                        :color="activeButton.color"
+                        :key="activeButton.icon"
+                        dark
+                        small
+                        absolute
+                        bottom
+                        right
+                        fab
+                        large
+                        @click="changeEditMode"
+                >
+                <v-icon>{{activeButton.icon}}</v-icon>
+                </v-btn>
+            </v-fab-transition>
         </div>
 </template>
 

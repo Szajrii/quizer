@@ -2,17 +2,17 @@
     <div class="quizer-creator-question-field">
         <div class="quizer-creator-question-field-wrapper">
             <div class="correct-answer">
-                <v-checkbox color="success" v-model="config.correctAnswer" @change="$emit('setCorrectAnswer', index)"></v-checkbox>
+                <v-checkbox color="success" :value="answer.correctAnswer" @change="setCorrectAnswer"></v-checkbox>
             </div>
             <v-text-field
-                    label="Answer"
+                    :label="answer.answerField"
                     single-line
                     full-width
                     hide-details
-                    v-model="config.answerField"
-                    @change="$emit('changeAnswer', {index: index, answerField: config.answerField})"
+                    v-model="answerField"
+                    @change="changeAnswer"
             ></v-text-field>
-            <div class="field-removeicon"><v-icon @click="$emit('answerToBeRemoved', index)" :disabled="this.numberOfAnswers <= 2">far fa-trash-alt</v-icon></div>
+            <div class="field-removeicon"><v-icon @click="removeAnswer" :disabled="this.numberOfAnswers <= 2">far fa-trash-alt</v-icon></div>
         </div>
         <v-divider></v-divider>
     </div>
@@ -20,14 +20,29 @@
 
 <script>
 
+    import {Eventbus} from "../../../eventbus/Eventbus";
+
     export default {
         name: "QuestionField",
-        props: ["answer", "index", "numberOfAnswers"],
+        props: ["answer", "index", "numberOfAnswers", "questionIndex"],
         data() {
             return {
-                config: this.answer
+                answerField: ''
             }
         },
+        methods: {
+            removeAnswer() {
+                if(this.numberOfAnswers > 2) {
+                    Eventbus.$emit('answerToBeRemoved', {index: this.index, questionIndex: this.questionIndex})
+                }
+            },
+            changeAnswer() {
+                Eventbus.$emit('changeAnswer', {index: this.index, answerField: this.answerField, questionIndex: this.questionIndex})
+            },
+            setCorrectAnswer() {
+                Eventbus.$emit('setCorrectAnswer', {index: this.index, questionIndex: this.questionIndex})
+            }
+        }
     }
 </script>
 

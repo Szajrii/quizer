@@ -1,11 +1,12 @@
 <template>
     <div class="quizer-creator-list">
         <Question v-for="(question, index) in questions"
-                  :question-number="index + 1"
+                  :index="index"
                   :key="'question' + (Math.random() + Math.random())"
                   :question="question"
                   :multiple="listConfig.multipleChoices"
                   @questionToBeRemoved="removeQuestion"
+                  @updateQuestionTitle="updateQuestionTitle"
         ></Question>
         <div class="add-question" v-if="!editMode">
             <v-btn color="success" dark large block @click="addQuestion">Add question</v-btn>
@@ -68,16 +69,42 @@
                   answers: [{answerField: "Type your answer here", correctAnswer: false },
                             {answerField: "Type your answer here", correctAnswer: false },
                             {answerField: "Type your answer here", correctAnswer: false }]
-              })
+              });
               this.listConfig.numberOfQuestions = this.questions.length;
           },
-          removeQuestion(questionNumber) {
-              this.questions.splice(questionNumber - 1, 1);
+          updateQuestionTitle({title, index}) {
+              this.questions[index].title = title;
+          },
+          removeQuestion(index) {
+              this.questions.splice(index, 1);
               this.listConfig.numberOfQuestions = this.questions.length;
+          },
+          addAnswer(index) {
+                this.questions[index].answers.push({answerField: "Type your answer here", correctAnswer: false});
+                this.listConfig.numberOfQuestions = this.questions.length;
+          },
+          changeAnswer({index, answerField, questionIndex}){
+              this.questions[questionIndex].answers[index].answerField = answerField;
+          },
+          removeAnswer({index, questionIndex}) {
+              this.questions[questionIndex].answers.splice(index, 1);
+          },
+          setCorrectAnswer({index, questionIndex}) {
+              const correctAsnwerState = this.questions[questionIndex].answers[index].correctAnswer;
+              if(this.listConfig.multipleChoices) {
+                  this.questions[questionIndex].answers[index].correctAnswer = !correctAsnwerState;
+              } else {
+                  this.questions[questionIndex].answers.forEach(a => a.correctAnswer = false);
+                  this.questions[questionIndex].answers[index].correctAnswer = !correctAsnwerState;
+              }
           }
         },
         created() {
             Eventbus.$on('configFields', this.updateConfig);
+            Eventbus.$on('addAnswer', this.addAnswer);
+            Eventbus.$on('changeAnswer', this.changeAnswer);
+            Eventbus.$on('answerToBeRemoved', this.removeAnswer);
+            Eventbus.$on('setCorrectAnswer', this.setCorrectAnswer)
         }
     }
 </script>
