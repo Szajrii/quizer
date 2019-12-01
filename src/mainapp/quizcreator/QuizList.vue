@@ -116,6 +116,9 @@
           },
           updateQuizData() {
               Eventbus.$emit('quizDataSent', this.questions)
+          },
+          sendDataForJson() {
+              Eventbus.$emit('jsonData', this.questions)
           }
         },
         created() {
@@ -125,6 +128,7 @@
             Eventbus.$on('answerToBeRemoved', this.removeAnswer);
             Eventbus.$on('setCorrectAnswer', this.setCorrectAnswer);
             Eventbus.$on('collectQuizData', this.updateQuizData);
+            Eventbus.$on('jsonGeneration', this.sendDataForJson);
         },
         beforeDestroy() {
             Eventbus.$off('configFields');
@@ -133,6 +137,7 @@
             Eventbus.$off('answerToBeRemoved');
             Eventbus.$off('setCorrectAnswer');
             Eventbus.$off('collectQuizData');
+            Eventbus.off('jsonGeneration');
         }
     }
 </script>

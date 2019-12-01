@@ -2,6 +2,7 @@
     <div class="quizer-creator">
         <Config></Config>
         <QuizList></QuizList>
+
         <v-snackbar v-model="configWarning" color="warning" multi-line>
             Seems like you want to create quiz without basic parameters. Please fill {{warningDetails}}.
             <v-btn
@@ -12,7 +13,11 @@
                 Close
             </v-btn>
         </v-snackbar>
-        <div class="upload-quiz" v-if="!config.editMode && config.editMode !== undefined"><v-btn @click="startUploadingProcess" large color="secondary">Upload Quiz</v-btn></div>
+
+        <div class="upload-quiz" v-if="!config.editMode && config.editMode !== undefined">
+            <v-btn @click="startUploadingProcess" large color="secondary">Upload Quiz</v-btn>
+        </div>
+
         <v-dialog v-model="showValidationWarning" max-width="690">
             <v-card>
                 <v-toolbar
@@ -20,7 +25,7 @@
                         color="warning"
                         dark
                 >
-                    <v-card-text class="warning-header">Ooops! Seems like you didn't provide all informations. <v-icon right  color="error">far fa-frown-open</v-icon></v-card-text>
+                    <v-card-text class="warning-header">Ooops! Seems like you didn't provide all informations. <v-icon right color="error">far fa-frown-open</v-icon></v-card-text>
                 </v-toolbar>
                 <v-card-text>
                     Don't worry, we can help you finish your quiz.
@@ -42,6 +47,7 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+
     </div>
 </template>
 
@@ -96,6 +102,7 @@
               Eventbus.$emit('collectQuizData');
           },
           uploadData(questions) {
+              this.config.numberOfQuestions = questions.length;
               const data = {
                   title: this.config.title,
                   category: this.config.category,
@@ -177,4 +184,5 @@
         display: flex;
         justify-content: space-between;
     }
+
 </style>

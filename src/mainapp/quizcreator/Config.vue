@@ -1,6 +1,9 @@
 <template>
         <div class="quizer-creator-config">
             <v-icon class="info-config" color="info" @click="showDialog = true">fas fa-info-circle</v-icon>
+            <div class="file-actions">
+                <v-icon color="info" @click="showFileActions = true">fas fa-file</v-icon>
+            </div>
             <div class="quizer-creator-config-title">
                     <v-text-field class="title-textfield"
                                   label="Title"
@@ -78,6 +81,24 @@
                 <v-icon>{{activeButton.icon}}</v-icon>
                 </v-btn>
             </v-fab-transition>
+
+            <v-dialog v-model="showFileActions" max-width="300">
+                <v-card>
+                    <v-toolbar
+                            flat
+                            color="#00838F"
+                            dark
+                    >
+                        <v-card-text>File Actions</v-card-text>
+                    </v-toolbar>
+                </v-card>
+                <v-btn @click="startGeneratingFile">
+                    <a :href="jsonButton.href" :download="jsonButton.download">
+                        Generate JSON File
+                    </a>
+                </v-btn>
+            </v-dialog>
+
             <v-dialog v-model="showDialog" max-width="490">
                 <v-card>
                     <v-toolbar
@@ -129,7 +150,12 @@
                     shuffle: false,
                     numberOfQuestions: 5
                 },
-                showDialog: false
+                showDialog: false,
+                showFileActions: false,
+                jsonButton: {
+                    href: '',
+                    download: ''
+                }
             }
         },
         methods: {
@@ -157,6 +183,19 @@
                 if(this.quizConfig.title === '' || this.quizConfig.category === '' || this.quizConfig.description === '') {
                     return true
                 }else return false
+            },
+            startGeneratingFile() {
+                Eventbus.$emit('jsonGeneration')
+            },
+            generateJSON(quiz) {
+                const quizConfig = {
+                    ...this.config,
+                    questions: quiz
+                };
+                const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizConfig));
+
+                this.jsonButton.href = 'data:' + data;
+                this.jsonButton.download = 'data.json';
             }
         },
         computed: {
@@ -167,6 +206,12 @@
                     return  {color: 'secondary', icon: 'fas fa-pen'}
                 }
             }
+        },
+        created() {
+            Eventbus.$on('jsonData', this.generateJSON)
+        },
+        beforeDestroy() {
+            Eventbus.off('jsonData')
         }
     }
 </script>
@@ -219,6 +264,11 @@
     .info-config {
         position: absolute;
         right: 5%;
+        top: 3%
+    }
+    .file-actions {
+        position: absolute;
+        left: 5%;
         top: 3%
     }
 
