@@ -189,9 +189,10 @@
             },
             generateJSON(quiz) {
                 const quizConfig = {
-                    ...this.config,
+                    ...this.quizConfig,
                     questions: quiz
                 };
+                console.log(quizConfig)
                 const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizConfig));
 
                 this.jsonButton.href = 'data:' + data;
@@ -211,7 +212,7 @@
             Eventbus.$on('jsonData', this.generateJSON)
         },
         beforeDestroy() {
-            Eventbus.off('jsonData')
+            Eventbus.$off('jsonData')
         }
     }
 </script>
