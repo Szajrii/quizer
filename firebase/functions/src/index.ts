@@ -1,4 +1,11 @@
 import * as functions from 'firebase-functions';
+import {
+    findEmptyAnswer,
+    findEmptyTitle,
+    findQuestionsWithoutCorrectAnswer,
+    quizConfig,
+    ValidationDetails
+} from "./validateQuizUtils";
 
 export const validateEmail = functions.https.onRequest((request, response) => {
     response.set('Access-Control-Allow-Origin', "*");
@@ -18,43 +25,41 @@ export const validateQuiz = functions.https.onRequest(async (request, response) 
     response.set('Access-Control-Allow-Methods', 'POST');
     response.set('Access-Control-Allow-Headers', 'Content-Type');
 
-    const validationDetails = {
+    const validationDetails: ValidationDetails = {
         validationStatus: true,
         numberOfQuestions: false,
-        emptyTitle: false,
-        emptyAnswer: false,
-        correctAnswerNotSelected: false
+        emptyTitle: [],
+        emptyAnswer: [],
+        correctAnswerNotSelected: []
     };
 
-    console.log(validationDetails);
     const config: quizConfig = request.body;
-    console.log(config);
-    //
 
     try {
-        const emptyTitle = await config.questions.some(q => q.title === "");
-        if(emptyTitle) {
-            validationDetails.validationStatus = false;
-            validationDetails.emptyTitle = true;
-        }
-
         const questions = await config.questions;
-        if(findEmptyAnswer(questions)) {
+        const emptyTitle = await findEmptyTitle(questions);
+        if(emptyTitle.length > 0) {
             validationDetails.validationStatus = false;
-            validationDetails.emptyAnswer = true;
+            validationDetails.emptyTitle = emptyTitle;
         }
 
-        const correctAnswerNotSelected = await config.questions.some(q => {
-            q.answers.some(answer => answer.correctAnswer);
-        });
+        const emptyAnswer = await findEmptyAnswer(questions);
+        if(emptyAnswer.length > 0) {
+            validationDetails.validationStatus = false;
+            validationDetails.emptyAnswer = emptyAnswer;
+        }
+
+        const correctAnswerNotSelected = await findQuestionsWithoutCorrectAnswer(questions);
+        if(correctAnswerNotSelected.length > 0) {
+            validationDetails.validationStatus = false;
+            validationDetails.correctAnswerNotSelected = correctAnswerNotSelected;
+        }
+
         if(config.numberOfQuestions < 5) {
             validationDetails.validationStatus = false;
             validationDetails.numberOfQuestions = true;
         }
-        if(correctAnswerNotSelected) {
-            validationDetails.validationStatus = false;
-            validationDetails.correctAnswerNotSelected = true;
-        }
+
     }catch (e) {
         console.log(e)
     }
@@ -62,29 +67,3 @@ export const validateQuiz = functions.https.onRequest(async (request, response) 
     response.send(validationDetails)
 });
 
-function findEmptyAnswer(arr: Question[]): boolean {
-    const arr2: string[] = [];
-    arr.forEach(x=> {
-        x.answers.forEach(q=> arr2.push(q.answerField) )
-    });
-    return arr2.some(x=> x === "");
-}
-
-type quizConfig = {
-    title: string
-    category: string
-    description: string
-    multipleChoices: boolean
-    numberOfQuestions: number
-    questions: Question[]
-}
-
-type Question = {
-    answers: Answer[]
-    title: string
-}
-
-type Answer = {
-    answerField: string
-    correctAnswer: boolean
-}

@@ -1,6 +1,6 @@
 <template>
     <div class="quizer-creator-question">
-        <v-card>
+        <v-card :key="'question v-card ' + index">
             <v-toolbar
                 flat
                 color="#00838F"
@@ -21,7 +21,7 @@
             </v-toolbar>
             <QuestionField
                     v-for="(answer, index2) in question.answers"
-                    :key="'answer' + Math.random()" :answer="answer"
+                    :key="'question ' + index + ' answer ' + index2" :answer="answer"
                     :index="index2"
                     :questionIndex="index"
                     :numberOfAnswers="question.answers.length"

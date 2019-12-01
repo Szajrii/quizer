@@ -1,8 +1,21 @@
 <template>
     <div class="quizer-creator-list">
+        <div class="assistant-bar">
+            <div class="assistant-bar-text" :class="{'assistant-bar-text-display' : displayAssistantBar}">
+                <span>Title: <span class="warning--text">{{listConfig.title}}; </span></span>
+                <span>Number of questions: <span class="warning--text">{{listConfig.numberOfQuestions}}; </span> </span>
+                <span>Multiple: <span class="warning--text">{{listConfig.multipleChoices}}; </span></span>
+                <span>Shuffle: <span class="warning--text">{{listConfig.shuffle}}; </span></span>
+            </div>
+            <div class="assistant-bar-arrow">
+                <v-icon @click="displayAssistantBar = !displayAssistantBar" :class="{'assistant-bar-arrow-rotate' : displayAssistantBar}" color="white">
+                    fas fa-caret-right
+                </v-icon>
+            </div>
+        </div>
         <Question v-for="(question, index) in questions"
                   :index="index"
-                  :key="'question' + (Math.random() + Math.random())"
+                  :key="'question' + index"
                   :question="question"
                   :multiple="listConfig.multipleChoices"
                   @questionToBeRemoved="removeQuestion"
@@ -28,14 +41,16 @@
                 listConfig: {
                     numberOfQuestions: 0,
                     multipleChoices: false,
-                    shuffle: false
+                    shuffle: false,
+                    title: ''
                 },
                 editMode: true,
-                questions: []
+                questions: [],
+                displayAssistantBar: false
             }
         },
         methods: {
-          updateConfig({numberOfQuestions, multipleChoices, shuffle, editMode}) {
+          updateConfig({numberOfQuestions, multipleChoices, shuffle, editMode, title}) {
               const currentNumberOfQuestions = this.listConfig.numberOfQuestions;
 
               this.editMode = editMode;
@@ -43,6 +58,7 @@
               this.updateList(currentNumberOfQuestions);
               this.listConfig.multipleChoices = multipleChoices;
               this.listConfig.shuffle = shuffle;
+              this.listConfig.title = title;
           },
           updateList(currentNumberOfQuestions) {
 
@@ -97,6 +113,9 @@
                   this.questions[questionIndex].answers.forEach(a => a.correctAnswer = false);
                   this.questions[questionIndex].answers[index].correctAnswer = !correctAsnwerState;
               }
+          },
+          updateQuizData() {
+              Eventbus.$emit('quizDataSent', this.questions)
           }
         },
         created() {
@@ -104,14 +123,24 @@
             Eventbus.$on('addAnswer', this.addAnswer);
             Eventbus.$on('changeAnswer', this.changeAnswer);
             Eventbus.$on('answerToBeRemoved', this.removeAnswer);
-            Eventbus.$on('setCorrectAnswer', this.setCorrectAnswer)
+            Eventbus.$on('setCorrectAnswer', this.setCorrectAnswer);
+            Eventbus.$on('collectQuizData', this.updateQuizData);
+        },
+        beforeDestroy() {
+            Eventbus.$off('configFields');
+            Eventbus.$off('addAnswer');
+            Eventbus.$off('changeAnswer');
+            Eventbus.$off('answerToBeRemoved');
+            Eventbus.$off('setCorrectAnswer');
+            Eventbus.$off('collectQuizData');
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
     .quizer-creator-list {
+        position: relative;
         width: 50%;
         margin: auto;
         margin-top: 10%;
@@ -120,6 +149,42 @@
     .add-question {
         width: 100%;
         margin-bottom: 5%;
+    }
+
+    .assistant-bar {
+        position: fixed;
+        left: 15%;
+        top: 20%;
+        background-color: rgba(103, 118, 184, 0.71);
+        display: flex;
+        z-index: 10;
+        color: white;
+        height: 40px;
+        line-height: 40px;
+
+        &-text {
+            border-right: 1px solid rgba(0, 0, 0, 0.3);
+            font-family: Centaur;
+            overflow: hidden;
+            max-width: 0;
+            transition: max-width 1s;
+            padding-left: 5px;
+
+            &-display {
+                padding-right: 5px;
+                display: block !important;
+                max-width: 700px !important;
+            }
+        }
+
+        &-arrow {
+            padding-left: 10px;
+            padding-right: 10px;
+
+            &-rotate {
+                transform: rotateZ(180deg);
+            }
+        }
     }
 
 </style>

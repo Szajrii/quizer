@@ -1,5 +1,6 @@
 <template>
         <div class="quizer-creator-config">
+            <v-icon class="info-config" color="info" @click="showDialog = true">fas fa-info-circle</v-icon>
             <div class="quizer-creator-config-title">
                     <v-text-field class="title-textfield"
                                   label="Title"
@@ -77,6 +78,34 @@
                 <v-icon>{{activeButton.icon}}</v-icon>
                 </v-btn>
             </v-fab-transition>
+            <v-dialog v-model="showDialog" max-width="490">
+                <v-card>
+                    <v-toolbar
+                            flat
+                            color="#00838F"
+                            dark
+                    >
+                        <v-card-text>Quiz Creator Description</v-card-text>
+                    </v-toolbar>
+                    <v-card-text>
+                        Hi, I am glad you are here. Let's take a while and read the description below. This panel will help you create your own quiz. Yeeey!
+                        Ok, let's be serious now. You have several options which will describe your quiz. First of all you must fill <span class="secondary--text">Title.</span>
+                        Obviously we want to have each quiz with name, that will help other users to find and play your quiz. The title can have maximum 30 characters. It's better
+                        to have short names. Next field that can't be empty is <span class="secondary--text">Category.</span> That will help users find quiz with category which are they
+                        good at. This field can have up to 20 characters. And last field that must be completed is <span class="secondary--text">Description.</span> Let other users know
+                        something more about your quiz. And remeber max 300 characters. Next you have <span class="info--text">Multiple Choices</span>
+                        and <span class="info--text">Shuffle Questions</span> , which means you can decide wheter your quiz should have more than 1 correct answer or not and if the questions
+                        and answers should be shuffled. Next you can enter <span class="info--text">number of questions</span> that will be generated. The number of questions can't be lesser
+                        than 5, let other users play more than 10 seconds :). Don't worry you can add/remove questions manually. However if you decide to change number from config panel be
+                        aware that if you type number lesser than current number of your questions you might loose a few last questions. Ok let's talk about question itself. Each question
+                        can't be empty and number of answer can't be greater than 6 and can't be lesser than 2 - it would't be quiz anymore. And each question must have selected
+                        at least one correct answer using checkbox. You can add/remove question/answer. After you're done with creatation, simply click add quiz button. It will be
+                        validated and if everything is ok it will be uploaded and added to your account and will became visible and playable for other players.
+                        Hope that's everything you must know. Good luck and have fun.
+                        <v-icon color="success">far fa-smile</v-icon>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
         </div>
 </template>
 
@@ -99,7 +128,8 @@
                     multipleChoices: false,
                     shuffle: false,
                     numberOfQuestions: 5
-                }
+                },
+                showDialog: false
             }
         },
         methods: {
@@ -184,6 +214,12 @@
         width: 80%;
         margin: auto;
         color: white !important;
+    }
+
+    .info-config {
+        position: absolute;
+        right: 5%;
+        top: 3%
     }
 
 </style>
