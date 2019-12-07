@@ -146,8 +146,8 @@
             Eventbus.$off('answerToBeRemoved');
             Eventbus.$off('setCorrectAnswer');
             Eventbus.$off('collectQuizData');
-            Eventbus.off('jsonGeneration');
-            Eventbus.off('loadData');
+            Eventbus.$off('jsonGeneration');
+            Eventbus.$off('loadData');
         }
     }
 </script>
