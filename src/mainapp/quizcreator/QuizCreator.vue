@@ -150,17 +150,31 @@
                       }
                   })
                   .catch(error => console.log(error))
+          },
+          updateFromLoad(data) {
+              const config = {
+                  category: data.category,
+                  description: data.description,
+                  editMode: false,
+                  multipleChoices: data.multipleChoices,
+                  shuffle: data.shuffle,
+                  title: data.title
+              }
+
+              this.updateConfig(config);
           }
         },
         created() {
             Eventbus.$on('configFieldsMissing', this.showConfigWarnign);
             Eventbus.$on('configFields', this.updateConfig);
             Eventbus.$on('quizDataSent', this.uploadData);
+            Eventbus.$on('loadData', this.updateFromLoad);
         },
         beforeDestroy() {
             Eventbus.$off('configFieldsMissing');
             Eventbus.$off('configFields');
             Eventbus.$off('quizDataSent');
+            Eventbus.$off('loadData');
         }
     }
 </script>

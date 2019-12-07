@@ -97,6 +97,11 @@
                         Generate JSON File
                     </a>
                 </v-btn>
+                <div class="file-input">
+                    <v-file-input label="File input" v-model="file"></v-file-input>
+
+                </div>
+                <v-btn color="primary" v-if="file" @click="loadFromFile">Load quiz</v-btn>
             </v-dialog>
 
             <v-dialog v-model="showDialog" max-width="490">
@@ -155,7 +160,8 @@
                 jsonButton: {
                     href: '',
                     download: ''
-                }
+                },
+                file: null
             }
         },
         methods: {
@@ -192,11 +198,28 @@
                     ...this.quizConfig,
                     questions: quiz
                 };
-                console.log(quizConfig)
+                console.log(quizConfig);
                 const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizConfig));
 
                 this.jsonButton.href = 'data:' + data;
                 this.jsonButton.download = 'data.json';
+            },
+            loadFromFile() {
+                const file = this.file;
+
+                file.text().then(data => {
+                    console.log(data)
+                    const data2 = JSON.parse(data);
+                    this.quizConfig.title = data2.title;
+                    this.quizConfig.category = data2.category;
+                    this.quizConfig.multipleChoices = data2.multipleChoices;
+                    this.quizConfig.shuffle = data2.shuffle;
+                    this.quizConfig.description = data2.description;
+                    this.quizConfig.numberOfQuestions = data2.questions.length;
+                    Eventbus.$emit('loadData', data2);
+                    this.editMode = false;
+                    this.showFileActions = false;
+                })
             }
         },
         computed: {
@@ -271,6 +294,11 @@
         position: absolute;
         left: 5%;
         top: 3%
+    }
+
+    .file-input {
+        width: 100%;
+        background-color: white;
     }
 
 </style>

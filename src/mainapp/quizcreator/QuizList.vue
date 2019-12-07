@@ -119,6 +119,14 @@
           },
           sendDataForJson() {
               Eventbus.$emit('jsonData', this.questions)
+          },
+          loadFromFile(data) {
+              this.editMode = false;
+              this.listConfig.numberOfQuestions = data.questions.length;
+              this.listConfig.shuffle = data.shuffle;
+              this.listConfig.multipleChoices = data.multipleChoices;
+              this.listConfig.title = data.title;
+              this.questions = data.questions;
           }
         },
         created() {
@@ -129,6 +137,7 @@
             Eventbus.$on('setCorrectAnswer', this.setCorrectAnswer);
             Eventbus.$on('collectQuizData', this.updateQuizData);
             Eventbus.$on('jsonGeneration', this.sendDataForJson);
+            Eventbus.$on('loadData', this.loadFromFile);
         },
         beforeDestroy() {
             Eventbus.$off('configFields');
@@ -138,6 +147,7 @@
             Eventbus.$off('setCorrectAnswer');
             Eventbus.$off('collectQuizData');
             Eventbus.off('jsonGeneration');
+            Eventbus.off('loadData');
         }
     }
 </script>
