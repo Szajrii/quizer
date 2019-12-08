@@ -259,7 +259,8 @@
             top: -15px;
             width: 60%;
             height: 50px;
-            background-color: rgba(37, 60, 181, 0.9);
+            background: rgb(58,128,180);
+            background: linear-gradient(196deg, rgba(58,128,180,1) 0%, rgba(100,29,253,1) 42%, rgba(113,17,191,1) 100%);
             border-radius: 5px;
             -webkit-box-shadow: 14px 17px 73px -13px rgba(0,0,0,0.75);
             -moz-box-shadow: 14px 17px 73px -13px rgba(0,0,0,0.75);

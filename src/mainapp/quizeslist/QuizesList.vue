@@ -8,7 +8,7 @@
                             justify="center"
                             class="grey lighten-5"
                     >
-                        <QuizCard v-for="quiz in quizesList" :title="quiz.title" :category="quiz.category" :rating="quiz.rating"></QuizCard>
+                        <QuizCard v-for="(quiz, index) in quizesList" :quiz="quiz" :key="'quizcard' + index"></QuizCard>
                     </v-row>
                 </v-col>
             </v-row>
@@ -20,10 +20,10 @@
     import QuizCard from './components/QuizCard'
     import firebase from "firebase";
     import "firebase/auth";
-    import router from '../../router'
+    import {Eventbus} from "../../eventbus/Eventbus";
 
     const db = firebase.firestore();
-    const axios = require('axios');
+
     export default {
         name: "QuizesList",
         components: {QuizCard},
@@ -32,14 +32,25 @@
                 quizesList: []
             }
         },
+        methods: {
+            updateComments(title) {
+                db.collection("Quizes").doc(title).get()
+                    .then(doc => {
+                        const quizToUpdate = this.quizesList.find(x=> x.title === title);
+                        quizToUpdate.comments = doc.data().comments;
+                    })
+            }
+        },
         created() {
             db.collection("Quizes").get()
                 .then(doc => {
-                doc.forEach(x=> this.quizesList.push(x.data()));
-            })
+                    doc.forEach(x=> this.quizesList.push(x.data()));
+            });
+            Eventbus.$on('updateQuizComments', this.updateComments);
         },
         beforeDestroy() {
             this.quizesList = [];
+            Eventbus.$off('updateQuizComments');
         }
     }
 </script>
