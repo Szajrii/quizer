@@ -7,6 +7,7 @@ import MainApp from '../mainapp/MainApp'
 import QuizCreator from '../mainapp/quizcreator/QuizCreator'
 import UserProfile from '../mainapp/userprofile/UserProfile'
 import QuizesList from '../mainapp/quizeslist/QuizesList'
+import Quiz from '../mainapp/quiz/Quiz'
 
 Vue.use(VueRouter);
 
@@ -48,6 +49,12 @@ const routes = [
         name: "profile",
         component: UserProfile
       },
+      {
+        path: 'quiz=' + ':quizname',
+        name: 'quiz',
+        props: true,
+        component: Quiz
+      }
     ]
   }
 ];

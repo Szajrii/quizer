@@ -21,6 +21,7 @@
     import firebase from "firebase";
     import "firebase/auth";
     import {Eventbus} from "../../eventbus/Eventbus";
+    import router from '../../router/index'
 
     const db = firebase.firestore();
 

@@ -19,6 +19,7 @@
             <v-btn
                     color="orange"
                     text
+                    @click="playQuiz"
             >
                 Play
             </v-btn>
@@ -60,6 +61,7 @@
                     <v-btn
                             color="orange"
                             text
+                            @click="playQuiz"
                     >
                         Play
                     </v-btn>
@@ -95,6 +97,7 @@
     import firebase from "firebase";
     import "firebase/auth";
     import {Eventbus} from "../../../eventbus/Eventbus";
+    import router from '../../../router'
 
     const db = firebase.firestore();
 
@@ -161,6 +164,20 @@
                         });
                     Eventbus.$emit('updateQuizComments', this.quiz.title);
                 }
+            },
+            playQuiz() {
+                this.setUpQuiz();
+                router.push( { name: 'quiz', params: {'quizname': this.quiz.title} } )
+            },
+            setUpQuiz() {
+                db.collection("Quizes").doc(this.quiz.title).get()
+                    .then(doc => {
+                        console.log(doc.data());
+                        this.$store.state.questions = doc.data().questions;
+                        this.$store.state.multipleChoices = doc.data().multipleChoices;
+                        this.$store.state.answers = [];
+                        console.log(this.$store.state)
+                    })
             }
         },
         mounted() {
