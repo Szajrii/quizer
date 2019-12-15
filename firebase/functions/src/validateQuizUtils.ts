@@ -45,7 +45,7 @@ export type quizConfig = {
     questions: Question[]
 }
 
-type Question = {
+export type Question = {
     answers: Answer[]
     title: string
 }

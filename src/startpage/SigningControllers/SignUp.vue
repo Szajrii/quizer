@@ -93,7 +93,8 @@
                                     db.collection("Users").doc(this.email).set({
                                         email: this.email,
                                         nickname: this.nickname,
-                                        quizes: []
+                                        quizes: [],
+                                        quizesRated: []
                                     });
                                     firebase.auth().onAuthStateChanged(user => {
                                         if (user) {

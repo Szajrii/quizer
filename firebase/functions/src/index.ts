@@ -7,6 +7,8 @@ import {
     ValidationDetails
 } from "./validateQuizUtils";
 
+import {Result, Respond} from './calculateQuizUtils'
+
 export const validateEmail = functions.https.onRequest((request, response) => {
     response.set('Access-Control-Allow-Origin', "*");
     response.set('Access-Control-Allow-Methods', 'POST');
@@ -67,3 +69,42 @@ export const validateQuiz = functions.https.onRequest(async (request, response) 
     response.send(validationDetails)
 });
 
+
+export const calculateQuiz = functions.https.onRequest(async (request, response) => {
+    response.set('Access-Control-Allow-Origin', "*");
+    response.set('Access-Control-Allow-Methods', 'POST');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    const result: Result = request.body;
+    const userAnswers: boolean[][] =  result.answers;
+    const questionsAnswers: boolean[][] =  [];
+    const respond: Respond = {
+        correctAnswers: 0,
+        answerStatus: []
+    };
+    try {
+
+        result.questions.forEach(x => {
+            const arr: boolean[] = [];
+            x.answers.forEach(y => arr.push(y.correctAnswer));
+            questionsAnswers.push(arr);
+        });
+
+        userAnswers.forEach( (x, index) => {
+            const isNotAnswerCorrect: boolean =  x.some((y, index2) => {
+                return y !== questionsAnswers[index][index2];
+            });
+            if(!isNotAnswerCorrect){
+                respond.answerStatus.push(true);
+                respond.correctAnswers++;
+            }else {
+                respond.answerStatus.push(false);
+            }
+        });
+
+    } catch (e) {
+        console.log(e)
+    }
+    response.send(respond);
+
+});

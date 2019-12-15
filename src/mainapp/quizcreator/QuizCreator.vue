@@ -127,6 +127,7 @@
                                   db.collection("Quizes").doc(data.title).set({
                                       owner: owner,
                                       rating: 0,
+                                      firstRating: false,
                                       comments: [],
                                       ...data
                                   });
