@@ -47,6 +47,7 @@ const routes = [
       {
         path: 'profile',
         name: "profile",
+        props: true,
         component: UserProfile
       },
       {

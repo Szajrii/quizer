@@ -14,7 +14,9 @@
                     </div>
                 </div>
                 <div class="quizer-mainapp-mainarea">
-                    <div class="quizer-mainapp-mainarea-topmenu"></div>
+                    <div class="quizer-mainapp-mainarea-topmenu">
+                        <span class="quizer-mainapp-mainarea-topmenu-tab">{{displayCurrentTab}}</span>
+                    </div>
                     <div class="quizer-mainapp-mainarea-content">
                         <transition name="redirect" mode="out-in">
                             <router-view></router-view>
@@ -34,9 +36,27 @@
             SideMenuElement
         },
         props: ["email"],
+        data(){
+            return {
+                currentTab: 'list'
+            }
+        },
+        computed: {
+          displayCurrentTab() {
+              switch (this.currentTab) {
+                  case "list":
+                      return 'Quizes List';
+                  case "profile":
+                      return "User Profile";
+                  case "create":
+                      return "Quiz Creator"
+              }
+          }
+        },
         methods: {
             navigateTo(destination) {
                 if(!this.$route.path.endsWith(destination)) {
+                    this.currentTab = destination;
                     router.push({ name: destination });
                 }else {}
             }
@@ -110,6 +130,18 @@
                 width: 100%;
                 height: 10%;
                 border-bottom: 1px solid rgba(250, 253, 234, 0.5);
+                position: relative;
+
+                &-tab {
+                    position: absolute;
+                    bottom: 5px;
+                    color: white;
+                    padding-left: 15px;
+                    font-size: 35px;
+                    font-weight: 600;
+                    align-items: center;
+                    text-shadow: 2px 4px 4px #000000;
+                }
             }
 
             &-content {

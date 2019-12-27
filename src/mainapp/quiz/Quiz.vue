@@ -7,7 +7,7 @@
                     <div class="quizer-quiz-answers">
                         <div class="quizer-quiz-answer" v-for="(answer, index) in currentQuestion.answers" :key="'actualquizanswer' + index">
                             <div class="quizer-quiz-answer-group" :key="'quizanswergroup' + index">
-                                <v-checkbox color="warning" :value="answers[index]"  @change="setAnswer(index)" :key="'correctAnswerState' + index"></v-checkbox>
+                                <v-checkbox color="warning" :value="answers[index]"  @change="setAnswer(index)" :key="'correctAnswerState' + (index + 1) * questionNumber"></v-checkbox>
                                 <span style="font-size: 22px" class="info--text" :key="'fieldwithanswer' + index">{{answer.answerField}}</span>
                             </div>
                             <v-divider></v-divider>
