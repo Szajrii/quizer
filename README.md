@@ -16,7 +16,7 @@ Tools that were helping me creating this app:
 
 ```
 
-To see quizer in action please use following ling [ShowCase](https://storage.googleapis.com/mszarek/quizer/index.html).
+To see quizer in action please use following link [ShowCase](https://storage.googleapis.com/mszarek/quizer/index.html).
 
 ### Future expansion
 
