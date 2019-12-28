@@ -4,34 +4,30 @@ You can use the [editor on GitHub](https://github.com/Szajrii/quizer/edit/master
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+### Quizer
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Quizer is an application designed for creating and and playing quizes. It provides tools to create quickly quiz which be available to play for other players. 
 
 ```markdown
-Syntax highlighted code block
+Tools that were helping me creating this app:
 
-# Header 1
-## Header 2
-### Header 3
+# Vue js
 
-- Bulleted
-- List
+- Vuetify
+- Vue router
+- Vuetify
+- Vuex
+- Firebase cloud firestore
+- Firebase cloud function as backend functionality 
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+To see quizer in action please use following ling [ShowCase](https://storage.googleapis.com/mszarek/quizer/index.html).
 
-### Jekyll Themes
+### Future expansion
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Szajrii/quizer/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+I am aware that application could be expanden for example profile user could be more complex. This application was made only for training purpose and it contains basic funcionality that is required. Stay tuned!
 
-### Support or Contact
+### Attention
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+This application might not be fully responsive and I am trully sorry for that. I would not recommend using it on small devices. I would like to focus myself on learning new tools/frameworks and technologys. Fully mobile version of this apllication might be created later on using [Vue native](https://vue-native.io/). Thank you for your attention and sorry for every mistake :)
