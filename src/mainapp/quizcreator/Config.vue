@@ -126,7 +126,7 @@
                         aware that if you type number lesser than current number of your questions you might loose a few last questions. Ok let's talk about question itself. Each question
                         can't be empty and number of answer can't be greater than 6 and can't be lesser than 2 - it would't be quiz anymore. And each question must have selected
                         at least one correct answer using checkbox. You can add/remove question/answer. After you're done with creatation, simply click add quiz button. It will be
-                        validated and if everything is ok it will be uploaded and added to your account and will became visible and playable for other players.
+                        validated and if everything is ok it will be uploaded and added to your account and will become visible and playable for other players.
                         Hope that's everything you must know. Good luck and have fun.
                         <v-icon color="success">far fa-smile</v-icon>
                     </v-card-text>
@@ -198,7 +198,6 @@
                     ...this.quizConfig,
                     questions: quiz
                 };
-                console.log(quizConfig);
                 const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quizConfig));
 
                 this.jsonButton.href = 'data:' + data;
@@ -208,7 +207,6 @@
                 const file = this.file;
 
                 file.text().then(data => {
-                    console.log(data)
                     const data2 = JSON.parse(data);
                     this.quizConfig.title = data2.title;
                     this.quizConfig.category = data2.category;

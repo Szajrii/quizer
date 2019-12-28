@@ -80,4 +80,8 @@
             width: 100%;
         }
     }
+
+    .title-removeicon i:hover {
+        color: red;
+    }
 </style>

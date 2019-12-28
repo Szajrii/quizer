@@ -8,7 +8,29 @@
             <v-btn
                     color="error"
                     text
+                    @click="quizAlreadyExist = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+
+        <v-snackbar v-model="quizAlreadyExist" color="warning" multi-line>
+            Quiz with provided name already exist. Please change quiz title.
+            <v-btn
+                    color="error"
+                    text
                     @click="configWarning = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+
+        <v-snackbar v-model="quizCreated" color="success" multi-line>
+            Quiz have been successfully created :)
+            <v-btn
+                    color="error"
+                    text
+                    @click="quizCreated = false"
             >
                 Close
             </v-btn>
@@ -57,7 +79,6 @@
     import {Eventbus} from '../../eventbus/Eventbus'
     import firebase from "firebase";
     import "firebase/auth";
-    import router from '../../router'
 
     const db = firebase.firestore();
     const axios = require('axios');
@@ -71,6 +92,8 @@
         data() {
             return {
                 configWarning: false,
+                quizAlreadyExist: false,
+                quizCreated: false,
                 warningDetails: '',
                 config: {},
                 showValidationWarning: false,
@@ -98,7 +121,6 @@
               this.config = config;
           },
           startUploadingProcess() {
-              console.log("weszlo 1");
               Eventbus.$emit('collectQuizData');
           },
           uploadData(questions) {
@@ -112,47 +134,55 @@
                   questions
               };
               const user = firebase.auth().currentUser;
-              axios.post('https://us-central1-quizer-2b2ff.cloudfunctions.net/validateQuiz', data)
-                  .then(response => {
-                      const responseData = response.data;
-                      console.log(responseData);
-                      if(responseData.validationStatus) {
-                          db.collection("Users").doc(user.email).update({
-                              quizes: firebase.firestore.FieldValue.arrayUnion(data.title)
-                          });
-                          let owner;
-                          db.collection("Users").doc(user.email).get()
-                              .then(doc => {
-                                  owner = doc.data().nickname;
-                                  db.collection("Quizes").doc(data.title).set({
-                                      owner: owner,
-                                      rating: 0,
-                                      firstRating: false,
-                                      comments: [],
-                                      ...data
-                                  });
+              db.collection("Quizes").doc(data.title).get()
+                  .then(doc => {
+                      if(!doc.data()) {
+                          axios.post('https://us-central1-quizer-2b2ff.cloudfunctions.net/validateQuiz', data)
+                              .then(response => {
+                                  const responseData = response.data;
+                                  if(responseData.validationStatus) {
+                                      db.collection("Users").doc(user.email).update({
+                                          quizes: firebase.firestore.FieldValue.arrayUnion(data.title)
+                                      });
+                                      let owner;
+                                      db.collection("Users").doc(user.email).get()
+                                          .then(doc => {
+                                              owner = doc.data().nickname;
+                                              db.collection("Quizes").doc(data.title).set({
+                                                  owner: owner,
+                                                  rating: 0,
+                                                  firstRating: false,
+                                                  comments: [],
+                                                  ...data
+                                              });
+                                          });
+                                      this.quizCreated = true;
+                                  }else {
+                                      this.validationDetails.missingFields = [];
+                                      this.validationDetails.numberOfQuestions = false;
+
+                                      if(responseData.emptyTitle.length > 0) {
+                                          this.validationDetails.missingFields.push({title: "Missing questions title", indexes: responseData.emptyTitle})
+                                      }
+                                      if(responseData.emptyAnswer.length > 0) {
+                                          this.validationDetails.missingFields.push({title: "Missing answers", indexes: responseData.emptyAnswer})
+                                      }
+                                      if(responseData.correctAnswerNotSelected.length > 0) {
+                                          this.validationDetails.missingFields.push({title: "Missing correct answers", indexes: responseData.correctAnswerNotSelected})
+                                      }
+                                      if(responseData.numberOfQuestions) {
+                                          this.validationDetails.numberOfQuestions = true;
+                                      }
+
+                                      this.showValidationWarning = true;
+                                  }
                               })
-                      }else {
-                          this.validationDetails.missingFields = [];
-                          this.validationDetails.numberOfQuestions = false;
-
-                          if(responseData.emptyTitle.length > 0) {
-                              this.validationDetails.missingFields.push({title: "Missing questions title", indexes: responseData.emptyTitle})
-                          }
-                          if(responseData.emptyAnswer.length > 0) {
-                              this.validationDetails.missingFields.push({title: "Missing answers", indexes: responseData.emptyAnswer})
-                          }
-                          if(responseData.correctAnswerNotSelected.length > 0) {
-                              this.validationDetails.missingFields.push({title: "Missing correct answers", indexes: responseData.correctAnswerNotSelected})
-                          }
-                          if(responseData.numberOfQuestions) {
-                              this.validationDetails.numberOfQuestions = true;
-                          }
-
-                          this.showValidationWarning = true;
+                              .catch(error => console.log(error))
+                      } else {
+                          this.quizAlreadyExist = true;
                       }
                   })
-                  .catch(error => console.log(error))
+
           },
           updateFromLoad(data) {
               const config = {

@@ -2,7 +2,9 @@
     <div class="quizer-creator-question-field">
         <div class="quizer-creator-question-field-wrapper">
             <div class="correct-answer">
-                <v-checkbox color="success" :value="answer.correctAnswer" @change="setCorrectAnswer" :id="'checkbox' + Math.random()"></v-checkbox>
+                <v-checkbox color="success" :input-value="answer.correctAnswer" @change="setCorrectAnswer"
+                            :key="'questionfield checkbox ' + questionIndex + ' answer ' + index">
+                </v-checkbox>
             </div>
             <v-text-field
                     :label="answer.answerField"
@@ -68,6 +70,7 @@
 
         i:hover {
             font-size: 30px;
+            color: red;
         }
     }
 

@@ -172,11 +172,9 @@
             setUpQuiz() {
                 db.collection("Quizes").doc(this.quiz.title).get()
                     .then(doc => {
-                        console.log(doc.data());
                         this.$store.state.questions = doc.data().questions;
                         this.$store.state.multipleChoices = doc.data().multipleChoices;
                         this.$store.state.answers = [];
-                        console.log(this.$store.state)
                     })
             }
         },
