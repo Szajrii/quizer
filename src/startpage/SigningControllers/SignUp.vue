@@ -80,7 +80,7 @@
             startRegister() {
                 if(!this.nickname || !this.email || (!this.password && this.password.length < 8)) {
                     this.showWarning = true;
-                    this.warning = 'You must fill every field.'
+                    this.warning = 'You must fill every field.';
                     setTimeout(()=> {this.showWarning = false}, 8000);
                 } else {
                     axios.post('https://us-central1-quizer-2b2ff.cloudfunctions.net/validateEmail', {
